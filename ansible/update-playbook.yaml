@@ -1,0 +1,15 @@
+---
+- name: Update Linux Packages
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update package lists
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      ansible.builtin.package:
+        name: "*"
+        state: latest
+

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: {{ .Values.backend.name }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.backend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.backend.name }}
+    spec:
+      containers:
+        - name: {{ .Values.backend.name }}
+          image: {{ .Values.backend.image.repository }}
+          ports:
+            - containerPort: {{ .Values.backend.deploymentPort }}
+          env:
+            - name: MONGO_URI
+              value: {{ .Values.mongo.connectionString }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: {{ .Values.backend.name }}
+spec:
+  selector:
+    app: {{ .Values.backend.name }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.backend.servicePort }}
+      targetPort: {{ .Values.backend.servicePort }}
+  type: {{ .Values.backend.type }}

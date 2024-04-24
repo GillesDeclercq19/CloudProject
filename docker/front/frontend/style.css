@@ -1,0 +1,21 @@
+.main {
+display: grid;
+grid-template-columns: auto auto;
+}
+p{
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+    margin: 0;
+}
+p:nth-child(4n), p:nth-child(4n-1){
+    background-color: lightgray;
+}
+p:nth-child(4n-2), p:nth-child(4n-3){
+    background-color: rgb(142, 138, 138);
+}
+p:nth-child(1), p:nth-child(2){
+    background-color: black;
+    color: white;
+}

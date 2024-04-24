@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Set debconf values for unattended-upgrades
+      ansible.builtin.debconf:
+        name: unattended-upgrades
+        question: "{{ item.question }}"
+        vtype: "{{ item.vtype | default('string') }}"
+        value: "{{ item.value }}"
+      with_items:
+        - { question: 'unattended-upgrades/enable_auto_updates', value: 'true' }
+        - { question: 'unattended-upgrades/allowed_origins', value: 'origin=Debian,codename={{ ansible_distribution_release }},label=Debian-Security' }
+        - { question: 'unattended-upgrades/enable_onerous', value: 'false' }
+
+    - name: Install unattended-upgrades package
+      ansible.builtin.package:
+        name: unattended-upgrades
+        state: present
+

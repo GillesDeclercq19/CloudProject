@@ -1,0 +1,31 @@
+---
+- name: Configure UFW
+  hosts: all
+  become: yes
+
+  vars:
+    ufw_package_name: "ufw"
+    package_manager: "apt"
+
+  tasks:
+    - name: Install UFW
+      apt:
+        name: "{{ ufw_package_name }}"
+        state: present
+
+    - name: Enable UFW
+      command: "{{ ufw_package_name }} --force enable"
+
+    - name: Allow traffic on specified ports
+      command: "{{ ufw_package_name }} allow {{ item }}"
+      with_items:
+        - 2023
+        - 31501
+        - 30665
+        - 27017
+        - 3000
+        - 80
+
+    - name: Reload UFW
+      command: "{{ ufw_package_name }} reload"
+
